@@ -1,4 +1,4 @@
-//This code was written by Dalton Briley, on November 18, 2022
+//This code was started by Dalton Briley, on November 18, 2022
 //This code was designed to create an more open source and easier understanding stepping stone to AI
 
 #include <iostream>
