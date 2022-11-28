@@ -24,13 +24,11 @@
     <ClCompile Include="SaveState.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="VisualShapeBuilders.cpp">
+    <ClCompile Include="ShapeBuilders.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <Text Include="Input.txt">
+    <ClCompile Include="Compute.cpp">
       <Filter>Source Files</Filter>
-    </Text>
+    </ClCompile>
   </ItemGroup>
 </Project>

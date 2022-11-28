@@ -13,6 +13,8 @@
 
 using namespace std;
 
+int* NetSize(int* cWidth, int length);
+
 int* BuildTriangle(int width, int length, int face);
 int* BuildSquare(int width, int length);
 int* BuildDiamond(int width, int length);
@@ -71,6 +73,7 @@ int main() {
 			if (shape == 2) {
 				//call function to build square nueron shape
 				cWidth = BuildSquare(width, length);
+				cout <<  *NetSize(cWidth, length);
 			}
 
 			//Diamond

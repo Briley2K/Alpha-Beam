@@ -139,13 +139,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Compute.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="New.cpp" />
     <ClCompile Include="SaveState.cpp" />
-    <ClCompile Include="VisualShapeBuilders.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <Text Include="Input.txt" />
+    <ClCompile Include="ShapeBuilders.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
