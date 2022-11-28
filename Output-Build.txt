@@ -1,0 +1,5 @@
+﻿Build started...
+1>------ Build started: Project: Alpha Beam, Configuration: Debug x64 ------
+1>VisualShapeBuilders.cpp
+1>Alpha Beam.vcxproj -> C:\Users\Briley\source\repos\Alpha Beam\x64\Debug\Alpha Beam.exe
+========== Build: 1 succeeded, 0 failed, 0 up-to-date, 0 skipped ==========
