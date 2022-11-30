@@ -73,19 +73,23 @@ void floatCompute(int* cWidth, int length, int iSize, int oSize) {//needs and in
 //------------------------------------------------------------------------------------------------
 	//calculate input weights and biases on 1st nueron layer
 	for (int i = 0; i < cWidth[0]; i ++) {
+
 		for (int j = 0; j < iSize; i++) {
 			net[i] += input[j] * weights[j];
 		}
-		net[i] += biases[0];
+		net[i] += biases[i];
 	}
+	int count = 0;
 	//Calulate rest of nueron layer
 	for (int i = 1; i < length; i++) { //layer interation starting on second layer
-		
-		for (int j = 0; j < cWidth[i]; j++) {//interate through each nureon on the layer that needs calc
-			
+		count += cWidth[i - 1];
+
+		for (int j = 0; j <= cWidth[i - 1]; j++) {//interate through each nureon on the layer that needs calc
+
+			net[count + j] = net[count - cWidth[i] + j] * weights[count - cWidth[i] + j];
 
 		}
-
+		net[i] += biases[i];
 	}
 
 	//Calculate output layer
