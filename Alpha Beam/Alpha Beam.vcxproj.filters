@@ -15,20 +15,31 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Main.cpp">
+    <ClCompile Include="Old.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="New.cpp">
+    <ClCompile Include="AlphaBeam.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="SaveState.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="ShapeBuilders.h">
+      <Filter>Header Files</Filter>
     </ClCompile>
     <ClCompile Include="ShapeBuilders.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Resource Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SaveLoad.cpp">
+      <Filter>Resource Files</Filter>
     </ClCompile>
     <ClCompile Include="Compute.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Resource Files</Filter>
     </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="SaveLoad.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Compute.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

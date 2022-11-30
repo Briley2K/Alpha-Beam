@@ -140,10 +140,15 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Compute.cpp" />
-    <ClCompile Include="Main.cpp" />
-    <ClCompile Include="New.cpp" />
-    <ClCompile Include="SaveState.cpp" />
+    <ClCompile Include="Old.cpp" />
+    <ClCompile Include="AlphaBeam.cpp" />
+    <ClCompile Include="SaveLoad.cpp" />
     <ClCompile Include="ShapeBuilders.cpp" />
+    <ClCompile Include="ShapeBuilders.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Compute.h" />
+    <ClInclude Include="SaveLoad.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

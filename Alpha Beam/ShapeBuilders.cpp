@@ -1,4 +1,5 @@
 //Visual Shape Builders (Main() Cleanup)
+
 #include <iostream>
 #include <iomanip>
 #include <cmath>
@@ -6,6 +7,7 @@
 using namespace std;
 //output shape to screen
 
+//get which way the shape is supposed to point
 int PointCheck(int face) {
 
 	cout << "\nInput meets (1:Face, 2:Point): ";
@@ -25,20 +27,20 @@ void OutShape(int* cWidth, int length) {
 		}
 	}
 	//build shape of layers
-			cout << "INPUT" << endl;
-		for (int i = 0; i < length; i++) {
+	cout << "INPUT" << endl;
+	for (int i = 0; i < length; i++) {
 
-			for (int j = 0; j < (maxWidth / 2) - (cWidth[i] / 2); j++) {
-				cout << ' ';
-			}
-
-			for (int k = 0; k < cWidth[i]; k++) {
-				cout << '*';
-			}
-
-			cout << endl;
+		for (int j = 0; j < (maxWidth / 2) - (cWidth[i] / 2); j++) {
+			cout << ' ';
 		}
+
+		for (int k = 0; k < cWidth[i]; k++) {
+			cout << '*';
+		}
+
+		cout << endl;
 	}
+}
 
 //build custom shape in cWidth
 int* BuildCustom(int length) {
@@ -50,6 +52,7 @@ int* BuildCustom(int length) {
 
 	}
 	return cWidth;
+	delete[] cWidth;
 }
 
 //build traingle shape in cWidth
@@ -70,9 +73,10 @@ int* BuildTriangle(int width, int length, int face) {
 		for (int i = 1; i <= length; i++) {
 			cWidth[i - 1] = (width / length) * i;
 		}
-	
+
 	}
 	return cWidth;
+	delete[] cWidth;
 }
 
 //build square shape in cWidth
@@ -80,12 +84,13 @@ int* BuildSquare(int width, int length) {
 
 	int* cWidth = new int[length];
 
-		for (int i = 0; i < length; i++) {
-			cWidth[i] = width;
-		}
+	for (int i = 0; i < length; i++) {
+		cWidth[i] = width;
+	}
 
-	
+
 	return cWidth;
+	delete[] cWidth;
 }
 
 //build diamond shape in cWidth
@@ -105,6 +110,7 @@ int* BuildDiamond(int width, int length) {
 	}
 
 	return cWidth;
+	delete[] cWidth;
 }
 
 //build trapezoid shape in cWidth
@@ -119,7 +125,7 @@ int* BuildTrapezoid(int width, int length, int sWidth, int face) { // needs adju
 	if (face == 1) { //Face to Input
 
 		for (int i = 1; i <= length; i++) {
-			cWidth[i - 1] = width - round((((w - sW )/ l) * i));
+			cWidth[i - 1] = width - round((((w - sW) / l) * i));
 			cout << width - round((((w - sW) / l) * i)) << " ";
 
 		}
@@ -135,9 +141,7 @@ int* BuildTrapezoid(int width, int length, int sWidth, int face) { // needs adju
 		}
 	}
 
-	
+
 	return cWidth;
-
-
-
+	delete[] cWidth;
 }

@@ -1,3 +1,6 @@
+#ifndef SAVELOAD_H // include guard
+#define SAVELOAD_H
+
 #include <cctype>
 #include <fstream>
 #include <iostream>
@@ -18,3 +21,4 @@ void SaveState(int shape/*pointers to weights and biases arrays*/) {
 
 
 }
+#endif

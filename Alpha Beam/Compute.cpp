@@ -1,32 +1,77 @@
 //take input and propogate through the nueral net
 
-#include <array>
 #include <iostream>
+#include <fstream>
+#include <vector>
 
 using namespace std;
 
 //return the amount of nuerons described by cWidth
-int* NetSize(int* cWidth) { // probelms
+int NetSize(int *cWidth, int length) { // probems
 
-	int* size = 0;
-
-	for (int i = 0; i < sizeof(cWidth); i++) {
+	int size = 0;
+	for (int i = 0; i < length; i++) {
 		size += cWidth[i];
-		cout << cWidth[i];
 	}
 	return size;
 }
-/*
-void* Compute(int* cWidth, int length) {
 
+//Open input file and stream in data (cycle through different chunks fo data with Iterator)
+//first chuck of data falls under iterator 0.
+void fileRead(int* Input, int length, int iterator) {
 
+	//open input file
+	ifstream finput;
+	finput.open("input.txt");
+
+	//Stream data from finput to Input array
+	for (int i = iterator; i < length; i++) {
+		 finput >> Input[i];
+	}
+	
+}
+
+//Zero an float array
+void zeroFArray(float *arr, int size) {
+	for (int i = 0; i < size; i++) {
+		arr[i] = 0;
+	}
+}
+
+//Zero an int array
+void zeroIArray(int* arr, int size) {
+	for (int i = 0; i < size; i++) {
+		arr[i] = 0;
+	}
+}
+
+//cWidth = the nureon layout array
+//length = the amount of layers in nueron grid
+//Isize = Input size
+//Osize = Output size
+void floatCompute(int* cWidth, int length, int iSize, int oSize) {//needs and int variant after completion that relies on int operations for speed
+	
+	//set size to amount of total nuerons
+	int size = NetSize(cWidth, length);
 
 	//nural net matrix
-	int* net = new int[length];
-	int* input = new int[length];
-	int* weghts = new int[length];
-	int* biases = new int[length];
+	float* net = new float[size];
+
+	float* weights = new float[size + iSize + oSize];
+	float* biases = new float[size + iSize + oSize];
+
+	float* input = new float[iSize];
+	float* output = new float[oSize];
+//------------------------------------------------------------------------------------------------
+	//set all arrays to 0
+	zeroFArray(net, size);
+	zeroFArray(weights, size + iSize + oSize);
+	zeroFArray(biases, size + iSize + oSize);
+	zeroFArray(input, iSize);
+	zeroFArray(output, oSize);
+
+//------------------------------------------------------------------------------------------------
 
 
 
-}*/
+}

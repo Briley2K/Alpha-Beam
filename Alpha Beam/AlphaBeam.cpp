@@ -2,31 +2,26 @@
 //This code was designed to create an more open source and easier understanding stepping stone to AI
 
 #include <iostream>
-#include <cmath>
 #include <fstream>
 #include <string>
 #include <cctype>
 #include <iomanip>
+#include <vector>
+
+#include "../Alpha Beam/ShapeBuilders.h"
+#include "../Alpha Beam/Compute.h"
 
 //dont forget the new[] and delete[], delete for cleaning up trash
 //https://towardsdatascience.com/adventure-of-the-neurons-theory-behind-the-neural-networks-5d19c594ca16
 
 using namespace std;
 
-int* NetSize(int* cWidth, int length);
-
-int* BuildTriangle(int width, int length, int face);
-int* BuildSquare(int width, int length);
-int* BuildDiamond(int width, int length);
-int* BuildTrapezoid(int width, int length, int sWidth, int face);
-int* BuildCustom(int length);
-void OutShape(int* cWidth, int length);
-int PointCheck(int face);
-
 
 int main() {
+
+//------------------------------------------------------------------------------------------------
 	//version info and name
-	string ver = "2.1.0";
+	string ver = "0.2.0";
 
 	cout << "Project Alpha Beam, by Dalton Briley." << endl;
 	cout << "Ver: " << ver << endl << endl;
@@ -37,6 +32,7 @@ int main() {
 
 	//Use info
 	cout << "When prompted with numbers before desired inputs, enter the number." << endl << endl;
+//------------------------------------------------------------------------------------------------
 
 	int width = 0;
 	int length = 0;
@@ -44,6 +40,8 @@ int main() {
 	int* cWidth = new int[length];
 	int maxWidth = 0; //used for displaying shape check
 	char answer = 'n';
+
+//------------------------------------------------------------------------------------------------
 
 	while (answer == 'n') {
 		//Shape input
@@ -73,7 +71,7 @@ int main() {
 			if (shape == 2) {
 				//call function to build square nueron shape
 				cWidth = BuildSquare(width, length);
-				cout <<  *NetSize(cWidth, length);
+				
 			}
 
 			//Diamond
@@ -118,34 +116,28 @@ int main() {
 					cWidth = BuildCustom(length);
 			}
 
+//------------------------------------------------------------------------------------------------
 			//Shape View
 			char sOut = 'n';
+			cout << "\nUsing " << NetSize(cWidth, length) << " total Nuerons \n";
 			cout << "\nWould you like to see your shape? (y/n): ";
 			cin >> sOut;
 
 			if (sOut == 'y') {
 				OutShape(cWidth, length);
 			}
-			else {
-				cout << "\nGreat!";
-			}
+
 			//Shape Verification
 			cout << "\nWill this shape work?";
 			cin >> answer;
+
 	}
-	
-	/*
-	
-			//Variable clean up
-			if (confirm == 'n') {
-				delete[] cWidth;
-			}
-	
-	*/
+//------------------------------------------------------------------------------------------------	
+
 
 
 	//build an array of the width of each layer of nuerons, width[xlayer] - startoflayer[3] = startoflayer[2] 
 
-
+	delete[] cWidth;
 	return 0;
 }
