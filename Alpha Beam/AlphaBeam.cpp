@@ -6,7 +6,6 @@
 #include <string>
 #include <cctype>
 #include <iomanip>
-#include <vector>
 
 #include "../Alpha Beam/ShapeBuilders.h"
 #include "../Alpha Beam/Compute.h"
@@ -37,23 +36,27 @@ int main() {
 	int width = 0;
 	int length = 0;
 	int face = 0;
+	int iSize = 0;
+	int oSize = 0;
 	int* cWidth = new int[length];
 	int maxWidth = 0; //used for displaying shape check
 	char answer = 'n';
 
 //------------------------------------------------------------------------------------------------
 
-	while (answer == 'n') {
+	while (tolower(answer) == 'n') {
+
 		//Shape input
 		cout << "What shape do you intend on using?" << endl;
 		cout << "1:triangle, 2:square, 3:diamond, 4:trapezoid, 5:hexagon, 6:octagon, 7:circle, 8:custom" << endl;
 		int shape = 0;
 		cin >> shape;
 		cout << endl;
-
-
-		//shape input and call to build function
-		//Triangle
+		
+		cout << "\nInput Size\n";
+		cin >> iSize;
+		cout << "\nOutput Size\n";
+		cin >> oSize;
 	
 
 			cout << "\nWidth :";
@@ -61,6 +64,7 @@ int main() {
 			cout << "\nLength :";
 			cin >> length;
 
+			//Triangle
 			if (shape == 1) {
 				face = PointCheck(face);
 				//call function to build triangle nueron shape
@@ -91,19 +95,20 @@ int main() {
 
 				//call function to build trapezoid nueron shape
 				cWidth = BuildTrapezoid(width, length, sWidth, face);
+				
 			}
 
-			//hexagon
+			//hexagon--
 			if (shape == 5) {
 
 			}
-
-			//octagon
+			
+			//octagon--
 			if (shape == 6) {
 
 			}
 
-			//circle
+			//circle--
 			if (shape == 7) {
 
 			}
@@ -119,7 +124,7 @@ int main() {
 //------------------------------------------------------------------------------------------------
 			//Shape View
 			char sOut = 'n';
-			cout << "\nUsing " << NetSize(cWidth, length) << " total Nuerons \n";
+			cout << "\nUsing " << NetSize(cWidth) << " total Nuerons with " << wbCount(cWidth, iSize, oSize, length) << " Weights and Biases";
 			cout << "\nWould you like to see your shape? (y/n): ";
 			cin >> sOut;
 
@@ -128,7 +133,7 @@ int main() {
 			}
 
 			//Shape Verification
-			cout << "\nWill this shape work?";
+			cout << "\nWill this shape work? (y/n)";
 			cin >> answer;
 
 	}

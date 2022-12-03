@@ -26,6 +26,7 @@ void OutShape(int* cWidth, int length) {
 			maxWidth = cWidth[i];
 		}
 	}
+
 	//build shape of layers
 	cout << "INPUT" << endl;
 	for (int i = 0; i < length; i++) {
@@ -49,7 +50,6 @@ int* BuildCustom(int length) {
 
 	for (int i = 0; i < length; i++) {
 		cin >> cWidth[i];
-
 	}
 	return cWidth;
 	delete[] cWidth;
