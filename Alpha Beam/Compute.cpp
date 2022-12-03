@@ -6,31 +6,41 @@
 
 using namespace std;
 
-//return the amount of elements in an array
+//return the total of all elements in the array
 int INetSize(int *arr) {
 
-		int length = *(&arr + 1) - arr;
-		return length;
+	int count = 0;
+	int iter = 0;
+		while (arr[iter] > 0) {
+
+			count += arr[iter];
+			iter++;
+		}
+		return count;
 }
 
 float FNetSize(float* arr) {
 
-	float length = *(&arr + 1) - arr;
-	return length;
+	float count = 0;
+	int iter = 0;
+	while (arr[iter] > 0) {
+
+		count += arr[iter];
+		iter++;
+	}
+	return count;
 }
 
 //Open input file and stream in data (cycle through different chunks fo data with Iterator)
-//first chuck of data falls under iterator 0.
-void fileRead(int* Input, int iSize) {
+void fileRead(int* Input, int iSize, int iter) {
 
-	int length = INetSize(Input);
 
 	//open input file
 	ifstream finput;
 	finput.open("input.txt");
 
 	//Stream data from finput to Input array
-	for (int i = iSize; i < length; i++) {
+	for (int i = iSize * iter; i < (iSize * iter) + iSize; i++) {
 		 finput >> Input[i];
 	}
 }
@@ -78,9 +88,8 @@ void floatCompute(int* cWidth, int length, int iSize, int oSize) {//needs and in
 
 	//set size to amount of total nuerons
 	int size = INetSize(cWidth);
+	//weights and biases size
 	int wbSize = wbCount(cWidth, iSize, oSize, length);
-
-//------------------------------------------------------------------------------------------------
 
 //------------------------------------------------------------------------------------------------
 
@@ -94,7 +103,7 @@ void floatCompute(int* cWidth, int length, int iSize, int oSize) {//needs and in
 	float* output = new float[oSize];
 //------------------------------------------------------------------------------------------------
 	  
-	//set all arrays to 0
+	//set all float arrays to 0
 	zeroFArray(net);
 
 	zeroFArray(weights);
@@ -105,10 +114,12 @@ void floatCompute(int* cWidth, int length, int iSize, int oSize) {//needs and in
 
 //------------------------------------------------------------------------------------------------
 	//calculate input weights and biases on 1st nueron layer
-	for (int i = 0; i < cWidth[0]; i ++) {
 
-		for (int j = 0; j < iSize; i++) {
-			net[i] += input[j] * weights[j];
+
+	for (int i = 0; i < cWidth[0]; i ++) {//iterate though each nueron on the first layer i=thenueron
+
+		for (int j = 0; j < iSize; i++) {//iterate through each weight and input
+			net[i] += input[(i*iSize)+j] * weights[(i*iSize)+j];
 		}
 		net[i] += biases[i];
 	}

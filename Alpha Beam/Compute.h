@@ -1,12 +1,13 @@
 //Compute functions for nueral net
 #pragma once
 
-//return the amount of nuerons described by cWidth
-int NetSize(int* arr);
+//return the total of all elements in the array
+int INetSize(int* arr);
+
 float FNetSize(float* arr);
 
 //Open input file and stream in data (cycle through different chunks fo data with Iterator)
-void fileRead(int* Input, int iSize);
+void fileRead(int* Input, int iSize, int iter);
 
 //returns the amount of weights and biases needed
 int wbCount(int* cWidth, int iSize, int oSize, int length);

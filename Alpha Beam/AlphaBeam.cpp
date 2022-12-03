@@ -124,7 +124,7 @@ int main() {
 //------------------------------------------------------------------------------------------------
 			//Shape View
 			char sOut = 'n';
-			cout << "\nUsing " << NetSize(cWidth) << " total Nuerons with " << wbCount(cWidth, iSize, oSize, length) << " Weights and Biases";
+			cout << "\nUsing " << INetSize(cWidth) << " total Nuerons with " << wbCount(cWidth, iSize, oSize, length) << " Weights and Biases";
 			cout << "\nWould you like to see your shape? (y/n): ";
 			cin >> sOut;
 
