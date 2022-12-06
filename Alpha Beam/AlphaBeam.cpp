@@ -87,7 +87,7 @@ int main() {
 			//Trapezoid
 			if (shape == 4) {
 
-				cout << "\nSecondary Width";
+				cout << "\nSecondary Width: ";
 				int sWidth;
 				cin >> sWidth;
 
@@ -124,7 +124,12 @@ int main() {
 //------------------------------------------------------------------------------------------------
 			//Shape View
 			char sOut = 'n';
-			cout << "\nUsing " << INetSize(cWidth) << " total Nuerons with " << wbCount(cWidth, iSize, oSize, length) << " Weights and Biases";
+			cout << "\nUsing " << IarrSize(cWidth, length) << " total Nuerons with " << wbCount(cWidth, iSize, oSize, length) << " Weights and Biases";
+
+			cout << endl << endl;
+			floatCompute(cWidth, length, iSize, oSize);
+			cout << endl << endl;
+
 			cout << "\nWould you like to see your shape? (y/n): ";
 			cin >> sOut;
 
@@ -137,11 +142,12 @@ int main() {
 			cin >> answer;
 
 	}
-//------------------------------------------------------------------------------------------------	
+//------------------------------------------------------------------------------------------------
+	//once shape is verfied lets do some calculations
 
 
 
-	//build an array of the width of each layer of nuerons, width[xlayer] - startoflayer[3] = startoflayer[2] 
+
 
 	delete[] cWidth;
 	return 0;

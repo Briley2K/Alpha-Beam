@@ -7,27 +7,20 @@
 using namespace std;
 
 //return the total of all elements in the array
-int INetSize(int *arr) {
-
+int IarrSize(int *arr, int size) {
 	int count = 0;
-	int iter = 0;
-		while (arr[iter] > 0) {
-
-			count += arr[iter];
-			iter++;
-		}
+	for (int i = 0; i < size; i++) {
+		count += *(&arr[i]);
+	}
 		return count;
 }
-
-float FNetSize(float* arr) {
+float FarrSize(float* arr, float size) {
 
 	float count = 0;
-	int iter = 0;
-	while (arr[iter] > 0) {
-
-		count += arr[iter];
-		iter++;
+	for (int i = 0; i < size; i++) {
+		count += *(&arr[i]);
 	}
+
 	return count;
 }
 
@@ -48,33 +41,32 @@ void fileRead(int* Input, int iSize, int iter) {
 //returns the amount of weights and biases needed
 int wbCount(int* cWidth,int iSize, int oSize, int length) {
 	int wSize = 0;
-	wSize += cWidth[0] * iSize;
-
-	for (int i = 1; i < length; i++) {
-		wSize += cWidth[i] * cWidth[i - 1];
+	
+	for (int i = 0; i < length; i++) {
+		if (i == 0) {
+			wSize += cWidth[i] * iSize;
+		}
+		if (i > 0) {
+			wSize += cWidth[i] * cWidth[i - 1];
+		}
 	}
-	wSize += cWidth[length - 1] * oSize;
 
+	wSize += cWidth[length - 1] * oSize;
 	return wSize;
 }
 
-//Zero an float array
-void zeroFArray(float *arr) {
-
-	float size = FNetSize(arr);
+//set an float array to val
+void valFArray(float *arr, float size, float val) {
 
 	for (int i = 0; i < size; i++) {
-		arr[i] = 0;
+		*(&arr[i]) = val;
 	}
 }
-
-//Zero an int array
-void zeroIArray(int* arr) {
-
-	int size = INetSize(arr);
+//int
+void valIArray(int* arr, int size, int val) {
 
 	for (int i = 0; i < size; i++) {
-		arr[i] = 0;
+		*(&arr[i]) = val;
 	}
 }
 
@@ -83,65 +75,136 @@ void zeroIArray(int* arr) {
 //Isize = Input size
 //Osize = Output size
 
-void floatCompute(int* cWidth, int length, int iSize, int oSize) {//needs and int variant after completion that relies on int operations for speed
+void floatCompute(int* cWidth, int length, int iSize, int oSize) {
 	
 
 	//set size to amount of total nuerons
-	int size = INetSize(cWidth);
+	int size = IarrSize(cWidth, length);
+
 	//weights and biases size
 	int wbSize = wbCount(cWidth, iSize, oSize, length);
-
 //------------------------------------------------------------------------------------------------
 
-	//nural net matrix
+	//Nueral net arrays creation
 	float* net = new float[size];
-
-	float* weights = new float[wbSize];
 	float* biases = new float[size];
-
+	float* weights = new float[wbSize];
 	float* input = new float[iSize];
 	float* output = new float[oSize];
-//------------------------------------------------------------------------------------------------
-	  
-	//set all float arrays to 0
-	zeroFArray(net);
-
-	zeroFArray(weights);
-	zeroFArray(biases);
-
-	zeroFArray(input);
-	zeroFArray(output);
 
 //------------------------------------------------------------------------------------------------
+
+	//set all float arrays to a value
+	valFArray(net, size, 1);
+	valFArray(weights, wbSize, 1);
+	valFArray(biases, size, 1);
+	valFArray(input, iSize, 1);
+	valFArray(output, oSize, 0);
+
+//------------------------------------------------------------------------------------------------
+ 
+//Input to Shape 
 	//calculate input weights and biases on 1st nueron layer
-
-
 	for (int i = 0; i < cWidth[0]; i ++) {//iterate though each nueron on the first layer i=thenueron
 
-		for (int j = 0; j < iSize; i++) {//iterate through each weight and input
-			net[i] += input[(i*iSize)+j] * weights[(i*iSize)+j];
+		cout << endl << "input calc nueron = " << i;//test
+
+		for (int j = 0; j < iSize; j++) {//iterate through each weight and input
+			net[i] += input[j] * weights[(i*iSize)+j];
+
+			cout << endl << "input previous nueron = " << j << " weight: " << (i * iSize) + j;//test
+
 		}
 		net[i] += biases[i];
 	}
 
+//Shape Calc
 	//Calulate rest of nueron layer
 	int count = 0;
+	//iterate through each weight starting on the weights on the second row
+	int countTwo = iSize * cWidth[0]; 
+
+
 	for (int i = 1; i < length; i++) { //layer interation starting on second layer
 		count += cWidth[i - 1];
-
-		for (int j = count; j < cWidth[i] + count; j++) {//interate through each nureon on the layer that needs calc
-
-			for (int k = count - cWidth[i - 1]; k < count; k++) {//iterate through each nueron on the previous layer
-
-				net[j] += net[k] * weights[k];
-
-			}
-			net[j] += biases[j];
-		}
 		
+		cout << endl << "i layer = " << i;//test
+
+		for (int j = count; j < cWidth[i] + count; j++) {//interate through each nureon on the layer that needs calc 11,12,13,14       count = 11          i=2
+
+			cout << endl << "j calc nueron = " << j;//test
+
+			for (int k = count - cWidth[i - 1]; k < count; k++) {//iterate through each nueron on the previous layer 6,7,8,9,10        cWidth[i-1] = 5    need 60 from this
+
+				cout << endl << "k previous nueron = " << k << " Weight: " << (countTwo) << "|" << count << "|" << countTwo << " This N=" << j;//test
+
+					*(&net[j]) += *(&net[k]) * *(&weights[countTwo]);
+
+					countTwo++;	
+			}
+			*(&net[j]) += *(&biases[j]);
+		}
 	}
 
-	
+/*
+	for (int i = 0; i < oSize; i++) {//iterate though each nueron on the last layer i=thenueron
+
+		for (int j = count - cWidth[length - 1]; j < count; j++) {//iterate through each weight and input
+
+			output[i] += net[j] * weights[count + j];
+
+		}
+		net[i] += biases[i];
+	}
+
+*/
+
+
+//------------------------------------------------------------------------------------------------	
 	//Calculate output layer
 
+
+	delete[] net;
+	delete[] biases;
+
+	delete[] weights;
+
+	delete[] input;
+	delete[] output;
+	//tests
+
 }
+
+//Test Code
+/*
+	cout << endl << "Net:";
+	for (int i = 0; i < size; i++) {
+		cout << "|" << *(&net[i]);
+
+	}
+	cout << endl << "Weights:";
+	for (int i = 0; i < wbSize; i++) {
+		cout << "|" << *(&weights[i]);
+
+	}
+	cout << endl << "Biases:";
+	for (int i = 0; i < size; i++) {
+		cout << "|" << *(&biases[i]);
+
+	}
+	cout << endl << "Input:";
+	for (int i = 0; i < iSize; i++) {
+		cout << "|" << *(&input[i]);
+
+	}
+	cout << endl << "Output:";
+	for (int i = 0; i < oSize; i++) {
+		cout << "|" << *(&output[i]);
+
+	}
+	cout << endl;
+	cout << endl;
+
+
+
+*/
