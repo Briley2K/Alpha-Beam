@@ -119,6 +119,7 @@ void floatCompute(int* cWidth, int length, int iSize, int oSize) {
 	}
 
 //Shape Calc
+
 	//Calulate rest of nueron layer
 	int count = 0;
 	//iterate through each weight starting on the weights on the second row
@@ -146,18 +147,20 @@ void floatCompute(int* cWidth, int length, int iSize, int oSize) {
 		}
 	}
 
-/*
-	for (int i = 0; i < oSize; i++) {//iterate though each nueron on the last layer i=thenueron
+//Shape to Output
+	for (int i = 0; i < oSize; i++) {//iterate though each nueron on the output layer i=thenueron
 
-		for (int j = count - cWidth[length - 1]; j < count; j++) {//iterate through each weight and input
+		cout << endl << "out nureon = " << i ;
 
-			output[i] += net[j] * weights[count + j];
+		for (int j = size - cWidth[length - 1]; j < size; j++) {//iterate through each weight and input
 
+			cout << endl << "previous nueron = " << j << " Weight: " << countTwo << " this N = o" << i;
+
+			*(&output[i]) += *(&net[j]) * *(&weights[countTwo]);
+			countTwo++;
 		}
-		net[i] += biases[i];
 	}
 
-*/
 
 
 //------------------------------------------------------------------------------------------------	
