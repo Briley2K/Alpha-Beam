@@ -41,6 +41,7 @@ void OutShape(int* cWidth, int length) {
 
 		cout << endl;
 	}
+	cout << "OUTPUT" << endl;
 }
 
 //build custom shape in cWidth
@@ -140,7 +141,6 @@ int* BuildTrapezoid(int width, int length, int sWidth, int face) { // needs adju
 
 		}
 	}
-
 
 	return cWidth;
 	delete[] cWidth;

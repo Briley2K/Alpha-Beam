@@ -1,7 +1,6 @@
 //Visual Shape Builders (Main() Cleanup)
 #pragma once
 
-
 int PointCheck(int face);
 
 //Cout shape

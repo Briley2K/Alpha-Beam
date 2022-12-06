@@ -126,10 +126,6 @@ int main() {
 			char sOut = 'n';
 			cout << "\nUsing " << IarrSize(cWidth, length) << " total Nuerons with " << wbCount(cWidth, iSize, oSize, length) << " Weights and Biases";
 
-			cout << endl << endl;
-			floatCompute(cWidth, length, iSize, oSize);
-			cout << endl << endl;
-
 			cout << "\nWould you like to see your shape? (y/n): ";
 			cin >> sOut;
 
@@ -145,8 +141,7 @@ int main() {
 //------------------------------------------------------------------------------------------------
 	//once shape is verfied lets do some calculations
 
-
-
+	NetSolve(cWidth, length, iSize, oSize);
 
 
 	delete[] cWidth;

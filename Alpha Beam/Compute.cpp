@@ -3,6 +3,7 @@
 #include <iostream>
 #include <fstream>
 #include <vector>
+#include <string>
 
 using namespace std;
 
@@ -24,13 +25,13 @@ float FarrSize(float* arr, float size) {
 	return count;
 }
 
-//Open input file and stream in data (cycle through different chunks fo data with Iterator)
-void fileRead(int* Input, int iSize, int iter) {
-
+//Open input file and stream in data (cycle through different chunks of data with Iterator)
+//will implement a more robust file reader in the future.
+void fileRead(float* Input, string filename, int iSize, int iter) {
 
 	//open input file
 	ifstream finput;
-	finput.open("input.txt");
+	finput.open(filename);
 
 	//Stream data from finput to Input array
 	for (int i = iSize * iter; i < (iSize * iter) + iSize; i++) {
@@ -70,13 +71,66 @@ void valIArray(int* arr, int size, int val) {
 	}
 }
 
-//cWidth = the nureon layout array
-//length = the amount of layers in nueron grid
-//Isize = Input size
-//Osize = Output size
+//calculate output of nueral net
+void calcOutput(int* cWidth, float* net, float* biases, float* weights, float* input, float* output, int length, int iSize, int oSize, int size, int wbSize) {
 
-void floatCompute(int* cWidth, int length, int iSize, int oSize) {
-	
+//------------------------------------------------------------------------------------------------
+	//Input to Shape 
+		//calculate input weights and biases on 1st nueron layer
+	for (int i = 0; i < cWidth[0]; i++) {//iterate though each nueron on the first layer i=thenueron
+		for (int j = 0; j < iSize; j++) {//iterate through each weight and input
+			net[i] += input[j] * weights[(i * iSize) + j];
+		}
+		net[i] += biases[i];
+	}
+
+//------------------------------------------------------------------------------------------------
+	//Shape Calc
+	//Calulate rest of nueron layer
+	int count = 0;
+	//iterate through each weight starting on the weights on the second row
+	int countTwo = iSize * cWidth[0];
+
+	for (int i = 1; i < length; i++) { //layer interation starting on second layer
+		count += cWidth[i - 1];
+		for (int j = count; j < cWidth[i] + count; j++) {//interate through each nureon on the layer that needs calc
+			for (int k = count - cWidth[i - 1]; k < count; k++) {//iterate through each nueron on the previous layer 
+				*(&net[j]) += *(&net[k]) * *(&weights[countTwo]);
+				countTwo++;
+			}
+			*(&net[j]) += *(&biases[j]);
+		}
+	}
+
+//------------------------------------------------------------------------------------------------
+	//Shape to Output
+	for (int i = 0; i < oSize; i++) {//iterate though each nueron on the output layer i=thenueron
+		for (int j = size - cWidth[length - 1]; j < size; j++) {//iterate through each weight and input
+			*(&output[i]) += *(&net[j]) * *(&weights[countTwo]);
+			countTwo++;
+		}
+	}
+
+}
+
+//sigmoid activation
+float SigmoidAct(float* output, int index) {
+	float result = 1 / (1 + exp(-output[index]));
+	return result;
+}
+
+//does exactly what you think it does
+void deleteArrays(float* net, float* biases, float* weights, float* input, float* output) {
+	delete[] net;
+	delete[] biases;
+	delete[] weights;
+	delete[] input;
+	delete[] output;
+}
+
+//create and propogate and learn, the meat
+void NetSolve(int* cWidth, int length, int iSize, int oSize) {
+
 
 	//set size to amount of total nuerons
 	int size = IarrSize(cWidth, length);
@@ -85,129 +139,57 @@ void floatCompute(int* cWidth, int length, int iSize, int oSize) {
 	int wbSize = wbCount(cWidth, iSize, oSize, length);
 //------------------------------------------------------------------------------------------------
 
-	//Nueral net arrays creation
+		//Nueral net arrays creation
 	float* net = new float[size];
 	float* biases = new float[size];
 	float* weights = new float[wbSize];
 	float* input = new float[iSize];
 	float* output = new float[oSize];
+	float* testoutput = new float[oSize];
 
 //------------------------------------------------------------------------------------------------
+//pre calc Set-Up
+	char answer = 'n';
+	cout << "\nWould you like to set the starting Weights, Biases, Nueron values?(recommended)(y/n): ";
+	cin >> answer;
+	//set all float arrays to a value (recommended)
+	if (tolower(answer) == 'y') {
+		float value;
+		cout << "\n Nuerons = ";
+		cin >> value;
+		valFArray(net, size, value);
+		cout << "\n Weights = ";
+		cin >> value;
+		valFArray(weights, wbSize, value);
+		cout << "\n Biases = ";
+		cin >> value;
+		valFArray(biases, size, value);
 
-	//set all float arrays to a value
-	valFArray(net, size, 1);
-	valFArray(weights, wbSize, 1);
-	valFArray(biases, size, 1);
-	valFArray(input, iSize, 1);
-	valFArray(output, oSize, 0);
+		//input and outputs will default to 0
+		valFArray(input, iSize, 0);
+		valFArray(output, oSize, 0);
+	}
+
+	//read input values from file into an array for parsing into input array
+	string infilename;
+	cout << "\nWhat is the name of the Input File?: ";
+	cin >> infilename;
+	fileRead(input, infilename, iSize, 0);
+
+	string outfilename;
+	cout << "\nWhat is the name of the Test File?: ";
+	cin >> outfilename;
+	fileRead(testoutput, outfilename, iSize, 0);
+
+	
 
 //------------------------------------------------------------------------------------------------
- 
-//Input to Shape 
-	//calculate input weights and biases on 1st nueron layer
-	for (int i = 0; i < cWidth[0]; i ++) {//iterate though each nueron on the first layer i=thenueron
-
-		cout << endl << "input calc nueron = " << i;//test
-
-		for (int j = 0; j < iSize; j++) {//iterate through each weight and input
-			net[i] += input[j] * weights[(i*iSize)+j];
-
-			cout << endl << "input previous nueron = " << j << " weight: " << (i * iSize) + j;//test
-
-		}
-		net[i] += biases[i];
-	}
-
-//Shape Calc
-
-	//Calulate rest of nueron layer
-	int count = 0;
-	//iterate through each weight starting on the weights on the second row
-	int countTwo = iSize * cWidth[0]; 
+	// calc output
+	// train
+	//------------------------------------------------------------------------------------------------
 
 
-	for (int i = 1; i < length; i++) { //layer interation starting on second layer
-		count += cWidth[i - 1];
-		
-		cout << endl << "i layer = " << i;//test
-
-		for (int j = count; j < cWidth[i] + count; j++) {//interate through each nureon on the layer that needs calc 11,12,13,14       count = 11          i=2
-
-			cout << endl << "j calc nueron = " << j;//test
-
-			for (int k = count - cWidth[i - 1]; k < count; k++) {//iterate through each nueron on the previous layer 6,7,8,9,10        cWidth[i-1] = 5    need 60 from this
-
-				cout << endl << "k previous nueron = " << k << " Weight: " << (countTwo) << "|" << count << "|" << countTwo << " This N=" << j;//test
-
-					*(&net[j]) += *(&net[k]) * *(&weights[countTwo]);
-
-					countTwo++;	
-			}
-			*(&net[j]) += *(&biases[j]);
-		}
-	}
-
-//Shape to Output
-	for (int i = 0; i < oSize; i++) {//iterate though each nueron on the output layer i=thenueron
-
-		cout << endl << "out nureon = " << i ;
-
-		for (int j = size - cWidth[length - 1]; j < size; j++) {//iterate through each weight and input
-
-			cout << endl << "previous nueron = " << j << " Weight: " << countTwo << " this N = o" << i;
-
-			*(&output[i]) += *(&net[j]) * *(&weights[countTwo]);
-			countTwo++;
-		}
-	}
-
-
-
-//------------------------------------------------------------------------------------------------	
-	//Calculate output layer
-
-
-	delete[] net;
-	delete[] biases;
-
-	delete[] weights;
-
-	delete[] input;
-	delete[] output;
-	//tests
-
+	
+	deleteArrays(net, biases, weights, input, output);
 }
 
-//Test Code
-/*
-	cout << endl << "Net:";
-	for (int i = 0; i < size; i++) {
-		cout << "|" << *(&net[i]);
-
-	}
-	cout << endl << "Weights:";
-	for (int i = 0; i < wbSize; i++) {
-		cout << "|" << *(&weights[i]);
-
-	}
-	cout << endl << "Biases:";
-	for (int i = 0; i < size; i++) {
-		cout << "|" << *(&biases[i]);
-
-	}
-	cout << endl << "Input:";
-	for (int i = 0; i < iSize; i++) {
-		cout << "|" << *(&input[i]);
-
-	}
-	cout << endl << "Output:";
-	for (int i = 0; i < oSize; i++) {
-		cout << "|" << *(&output[i]);
-
-	}
-	cout << endl;
-	cout << endl;
-
-
-
-*/
