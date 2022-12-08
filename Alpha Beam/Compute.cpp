@@ -71,6 +71,13 @@ void valIArray(int* arr, int size, int val) {
 	}
 }
 
+//sigmoid activation
+float SigmoidAct(float* output, int index) {
+	float result = 1 / (1 + exp(-output[index]));
+	return result;
+}
+
+
 //calculate output of nueral net
 void calcOutput(int* cWidth, float* net, float* biases, float* weights, float* input, float* output, int length, int iSize, int oSize, int size, int wbSize) {
 
@@ -82,6 +89,7 @@ void calcOutput(int* cWidth, float* net, float* biases, float* weights, float* i
 			net[i] += input[j] * weights[(i * iSize) + j];
 		}
 		net[i] += biases[i];
+		SigmoidAct(net, i);
 	}
 
 //------------------------------------------------------------------------------------------------
@@ -99,6 +107,7 @@ void calcOutput(int* cWidth, float* net, float* biases, float* weights, float* i
 				countTwo++;
 			}
 			*(&net[j]) += *(&biases[j]);
+			SigmoidAct(net, j);
 		}
 	}
 
@@ -109,15 +118,11 @@ void calcOutput(int* cWidth, float* net, float* biases, float* weights, float* i
 			*(&output[i]) += *(&net[j]) * *(&weights[countTwo]);
 			countTwo++;
 		}
+		SigmoidAct(output, i);
 	}
 
 }
 
-//sigmoid activation
-float SigmoidAct(float* output, int index) {
-	float result = 1 / (1 + exp(-output[index]));
-	return result;
-}
 
 //does exactly what you think it does
 void deleteArrays(float* net, float* biases, float* weights, float* input, float* output) {
@@ -146,6 +151,7 @@ void NetSolve(int* cWidth, int length, int iSize, int oSize) {
 	float* input = new float[iSize];
 	float* output = new float[oSize];
 	float* testoutput = new float[oSize];
+	float* error = new float[oSize];
 
 //------------------------------------------------------------------------------------------------
 //pre calc Set-Up
@@ -174,16 +180,44 @@ void NetSolve(int* cWidth, int length, int iSize, int oSize) {
 	string infilename;
 	cout << "\nWhat is the name of the Input File?: ";
 	cin >> infilename;
-	fileRead(input, infilename, iSize, 0);
+	//fileRead(input, infilename, iSize, 0);
 
 	string outfilename;
 	cout << "\nWhat is the name of the Test File?: ";
 	cin >> outfilename;
-	fileRead(testoutput, outfilename, iSize, 0);
-
-	
+	//fileRead(testoutput, outfilename, iSize, 0);
 
 //------------------------------------------------------------------------------------------------
+	double learnRate = 0.1;
+	cout << "What should the learning rate be? ";
+	cin >> learnRate;
+
+	double iterations = 0;
+	cout << "\nHow many cycles would you like to train the Network? ";
+	cin >> iterations;
+
+	for (int i = 0; i < iterations; i++) {
+
+		//pull data in
+		fileRead(input, infilename, iSize, i);
+		fileRead(testoutput, outfilename, oSize, i);
+
+		//propgate date through network
+		calcOutput(cWidth, net, biases, weights, input, output, length, iSize, oSize, size, wbSize);
+
+		//find error
+		float cost = 0;
+		for (int i = 0; i < oSize; i++) {
+			cost += pow(*(&output[i]) - *(&testoutput[i]), 2);
+			error[i] = pow(*(&output[i]) - *(&testoutput[i]), 2);
+		}
+		//adjust weights
+		for (int i = wbSize - 1; i != 0; i--) {
+			
+			
+		}
+
+	}
 	// calc output
 	// train
 	//------------------------------------------------------------------------------------------------
